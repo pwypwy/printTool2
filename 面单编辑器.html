@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+	<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+	<style>
+		#header {
+			background-color:black;
+			color:white;
+			text-align:center;
+			padding:5px;
+		}
+		#nav {
+			line-height:30px;
+			background-color:#eeeeee;
+			
+			width:15cm;
+			float:left;
+			padding:5px;	      
+		}
+		#section {
+			width:15cm;
+			float:left;
+			padding:10px;	 	 
+		}
+		#footer {
+			background-color:black;
+			color:white;
+			clear:both;
+			text-align:center;
+			padding:5px;	 	 
+		}
+	</style>
+</head>
+<body>
+	<div id="header">
+		<h1>面单编辑器</h1>
+	</div>
+
+	<div id="nav">
+		<div id="page"  style="height: 15cm;width: 10cm; border:1px solid #000; margin: 1cm">
+			<div id='div' style="height: 1cm;border:1px solid #000; margin-right: -1px;margin-bottom: -1px;margin-left: -1px;margin-top: -1px" >1</div>  
+		</div>
+	</div>
+
+	<div id="section">
+		<h1>London</h1>
+		<div >
+			<div style="display: inline; margin: 1cm">
+				<input value="1" onkeyup="setHeight(this.value)">
+				<input value="1" onkeyup="setWidth(this.value)">
+				<button onclick="addLine()"> 增加一栏</button>
+			</div>
+			<div style="display: inline; margin: 1cm">
+				<input value="1" onkeyup="setHeight(this.value)">
+				<input value="1" onkeyup="setWidth(this.value)">
+				<button onclick="addLine()"> 增加一栏</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div style="display: inline;">
+	</div>
+	
+	<script type="text/javascript">
+		var order = 1;
+		var currentDiv = document.getElementById("div");
+
+		function select(argument) {
+	// body...
+}
+
+function put(value) {
+	//alert(value);
+	 var div = document.getElementById("div");//创建div，名称为div
+	 if(value<15){
+	 	div.style.height = value + "cm";
+	 	div.style.width = value + "cm";
+	 }
+
+	}
+
+	function setHeight(value) {
+	//alert(value);
+	 var div = document.getElementById("div");//创建div，名称为div
+	 if(value<15){
+	 	div.style.height = value + "cm";
+	 }
+
+	}
+
+	function setWidth(value) {
+	//alert(value);
+	 var div = document.getElementById("div");//创建div，名称为div
+	 if(value<15){
+	 	div.style.width = value + "cm";
+	 }
+
+	}
+
+	function addLine(value) {
+		order++;
+	//alert(value);
+	var page = document.getElementById("page");//创建div，名称为div
+	var line = document.createElement("div");
+	line.innerHTML= order;
+	line.style.border = "1px solid #000";
+	line.style.height = "1cm";
+	//line.style.marginRight = "-1px";
+	//line.style.marginBottom = "-1px";
+	//line.style.marginLeft = "-1px";
+	line.style.marginTop = "-2px";	
+	page.appendChild(line);
+
+}
+
+function splitH() {
+	var input = document.getElementById("splitInput");
+	var op = input.value;
+	if(op.indexOf("|") != -1){
+		var splitInfo = op.split('|');
+		for (var i = 0; i < splitInfo.length; i++) {
+			splitInfo[i]
+		}
+	}
+}
+
+
+</script>
+</body>
+</html>
