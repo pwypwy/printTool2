@@ -44,7 +44,7 @@
 		</div>
 	</div>
 
-	<div id="section">
+	<div id="section" style="width: 200px">
 		<h1>London</h1>
 		<div >
 			<div style="display: inline; margin: 1cm">
@@ -103,6 +103,12 @@ function put(value) {
 	function addLine(value) {
 		order++;
 	//alert(value);
+	var a = {
+		"name":1111,
+		"code":2222
+	}
+
+	console.log(a);
 	var page = document.getElementById("page");//创建div，名称为div
 	var line = document.createElement("div");
 	line.innerHTML= order;
