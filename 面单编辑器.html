@@ -65,75 +65,170 @@
 	</div>
 	
 	<script type="text/javascript">
+		var map = {
+			"x":"x坐标",
+			"y":"y坐标",
+			"w":"宽",
+			"h":"高",
+			"data":"数据",
+			"grid":"格子",
+			"txt":"文本",
+			"barcode":"条码",
+			"QRcode":"二维码",
+			"img":"图片",
+			"src":"链接地址",
+			"hede":"是否隐藏",
+			"code":"编码",
+			"size":"字体尺寸",
+			"font":"字体",
+			"lineSpace":"行间距",
+			"direction":"方向",
+			"margin":"边距",
+			"ih":"初始高度"
+		};
+
 		var order = 1;
 		var currentDiv = document.getElementById("div");
 
 		function select(argument) {
-	// body...
-}
-
-function put(value) {
-	//alert(value);
-	 var div = document.getElementById("div");//创建div，名称为div
-	 if(value<15){
-	 	div.style.height = value + "cm";
-	 	div.style.width = value + "cm";
-	 }
-
-	}
-
-	function setHeight(value) {
-	//alert(value);
-	 var div = document.getElementById("div");//创建div，名称为div
-	 if(value<15){
-	 	div.style.height = value + "cm";
-	 }
-
-	}
-
-	function setWidth(value) {
-	//alert(value);
-	 var div = document.getElementById("div");//创建div，名称为div
-	 if(value<15){
-	 	div.style.width = value + "cm";
-	 }
-
-	}
-
-	function addLine(value) {
-		order++;
-	//alert(value);
-	var a = {
-		"name":1111,
-		"code":2222
-	}
-
-	console.log(a);
-	var page = document.getElementById("page");//创建div，名称为div
-	var line = document.createElement("div");
-	line.innerHTML= order;
-	line.style.border = "1px solid #000";
-	line.style.height = "1cm";
-	//line.style.marginRight = "-1px";
-	//line.style.marginBottom = "-1px";
-	//line.style.marginLeft = "-1px";
-	line.style.marginTop = "-2px";	
-	page.appendChild(line);
-
-}
-
-function splitH() {
-	var input = document.getElementById("splitInput");
-	var op = input.value;
-	if(op.indexOf("|") != -1){
-		var splitInfo = op.split('|');
-		for (var i = 0; i < splitInfo.length; i++) {
-			splitInfo[i]
+			// body...
 		}
-	}
-}
+
+		function put(value) {
+		//alert(value);
+			 var div = document.getElementById("div");//创建div，名称为div
+			 if(value<15){
+			 	div.style.height = value + "cm";
+			 	div.style.width = value + "cm";
+			 }
+
+		}
+
+		function setHeight(value) {
+			//alert(value);
+			 var div = document.getElementById("div");//创建div，名称为div
+			 if(value<15){
+			 	div.style.height = value + "cm";
+			 }
+
+		}
+
+		function setWidth(value) {
+			//alert(value);
+			var div = document.getElementById("div");//创建div，名称为div
+			if(value<15){
+			 	div.style.width = value + "cm";
+			}
+
+		}
+
+		function addLine(value) {
+			var obj = {
+				"id":10085,
+				"name":"test",
+				"type":"grid",
+				"tag":"llll",
+				"child":{
+					"aaa":444,
+					"ddd":"dddd"
+				},
+				"b":true,
+				"data":0.99
+			}
 
 
-</script>
+			var div = document.getElementById("page");
+			createPageByObject(obj,div);
+
+
+			order++;
+			//alert(value);
+			var a = {
+				"name":1111,
+				"code":2222
+			}
+
+			console.log(a);
+			var page = document.getElementById("page");//创建div，名称为div
+			var line = document.createElement("div");
+			line.innerHTML= order;
+			line.style.border = "1px solid #000";
+			line.style.height = "1cm";
+			//line.style.marginRight = "-1px";
+			//line.style.marginBottom = "-1px";
+			//line.style.marginLeft = "-1px";
+			line.style.marginTop = "-2px";	
+			page.appendChild(line);
+
+		}
+
+		function splitH() {
+			var input = document.getElementById("splitInput");
+			var op = input.value;
+			if(op.indexOf("|") != -1){
+				var splitInfo = op.split('|');
+				for (var i = 0; i < splitInfo.length; i++) {
+					splitInfo[i]
+				}
+			}
+		}
+
+		function createPageByObject(obj,div) {
+			Object.keys(obj).forEach(function(key){
+
+				console.log(key,obj[key]);
+				//alert(typeof(obj[key]));
+				if(typeof(obj[key]) === "object"){
+					var child = document.createElement("div");
+					child.id = key+"-object";
+					child.style.border = "1px solid #000";
+					child.style.height = "1cm";
+
+					insertDiv(key,div,child);
+					createPageByObject(obj[key],child);
+				}else if(typeof(obj[key]) === "number"){
+					var input = document.createElement("input");
+					input.id = key;
+					input.type = "number";
+					input.value = obj[key];
+					insertDiv(key,div,input);
+
+				}else if(typeof(obj[key]) === "string"){
+					var input = document.createElement("input");
+					input.id = key;
+					//input.type = "string";
+					input.value = obj[key];
+					insertDiv(key,div,input);
+				}else if(typeof(obj[key]) === "boolean"){
+					var input = document.createElement("input");
+					input.id = key;
+					input.type = "radio";
+					input.value = obj[key];
+					insertDiv(key,div,input);
+				}
+
+			});
+		}
+
+
+		//将生成的组件插入对应的 div 中
+		function insertDiv(key,div,child) {
+			var content = document.createElement("div");
+			var label = document.createElement("label");
+			content.id = key;
+			var cName ="";
+			if(indexOf(key)!=-1){
+				cName = map[key.split('_')[0]] + key.split('_')[1];
+			}else{
+				cName = map[key];
+			}
+			label.innerHTML = cName;
+
+			content.appendChild(label);
+			content.appendChild(child);
+			div.appendChild(content);
+		}
+
+	</script>
 </body>
 </html>
