@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>双向绑定最最最初级demo</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <div id="app">
+            <input type="text" id="txt">
+            <input type="text" id="txt2">
+            <p id="show-txt"></p>
+            <button onclick="add()">点我</button> 
+        </div> 
+    </body>
+    <script>
+        function creatDo(key,x,y,w,h,addFunc) { 
+            var o = new Object();
+            o.id = key;
+            o.x = x;
+            o.y = y;
+            o.w = w;
+            o.h = h;
+            o.add = addFunc;
+
+            return o;
+        }
+
+        function newObject(key,x,y,w,h,addFunc,deleteFunc) { 
+            var o = new Object();
+            o.id = key;
+            o.x = x;
+            o.y = y;
+            o.w = w;
+            o.h = h;
+            o.add = addFunc;
+            o.del= deleteFunc;
+
+            return o;
+        }
+
+        var addFunc = function (child) { 
+            console.log(child);
+            this[child.id] = child;
+            console.log("执行add");
+            return console.log(this);
+        }
+
+        var delFunc = function (id) { 
+
+            delete this[id]
+            console.log("执行delete");0
+            return console.log(this);
+        }
+
+        var txt = {
+            id:'007',
+            x:2,
+            y:3,
+            w:6,
+            h:9,
+            txt:'我是文本'
+        }
+
+        var dto = newObject('id',3,4,5,6,addFunc,delFunc);
+        dto.add(txt);
+
+        var obj={}
+        var temp = null;
+        Object.defineProperty(obj,'txt',{
+            get:function(){
+                return obj['txt'];
+            },
+            set:function(newValue){
+                temp = newValue;
+                document.getElementById('txt').value = newValue
+                document.getElementById('show-txt').innerHTML = newValue
+            }
+        })
+        document.addEventListener('keyup',function(e){
+            //alert(e.target.id)
+            obj[e.target.id]= e.target.value
+        })
+
+        document.addEventListener('click',function(e){
+            //alert(e.target.id)
+            //obj[e.target.id]= e.target.value
+        })
+
+
+        var app = document.getElementById("app");
+        var input = document.createElement("input");
+
+        app.appendChild(input);
+
+
+        function add(argument) {
+            console.log(obj);
+            //obj.txt = '1111';
+            obj.ts = '222';
+            var str = JSON.stringify(obj);
+            alert(str);
+        }
+
+
+        let obj2 = {name:'Joe',age:100} 
+         
+        let obj3 = new Proxy(obj2,{
+            get:function(target,key,receiver){
+                console.log(`get ${key}`)
+                return Reflect.get(target,key,receiver)
+            },
+            set:function(target,key,value,receiver){
+                console.log(`set ${key}`+value)
+                return Reflect.set(target,key,value,receiver)
+            }
+        })
+         
+        //console.log(obj2.name)    // get name     "Joe"
+        obj3.name = "Bob" 
+        obj2.name = 'yyyy'      // set name
+        //console.log(obj1.name)    // get name     "Bob"
+    </script>
+</html>

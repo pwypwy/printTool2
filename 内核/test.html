@@ -1,0 +1,274 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>动态缩放div</title>
+<style>
+	div.s-dynamic {
+	}
+	div.s-dynamic > div {
+		position: absolute;
+		background-color: #CCC;
+	}
+	div.s-dynamic > div.s-dynamicTop {
+		top: 0;
+		right: 0;
+		left: 0;
+		height: 2px;
+		z-index: 100;
+		cursor: n-resize;
+	}
+	div.s-dynamic > div.s-dynamicTopRight {
+		top: 0;
+		right: 0;
+		width: 2px;
+		height: 2px;
+		z-index: 150;
+		cursor: ne-resize;
+	}
+	div.s-dynamic > div.s-dynamicRight {
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 2px;
+		z-index: 100;
+		cursor: e-resize;
+	}
+	div.s-dynamic > div.s-dynamicBottomRight {
+		bottom: 0;
+		right: 0;
+		width: 2px;
+		height: 2px;
+		z-index: 150;
+		cursor: nw-resize;
+	}
+	div.s-dynamic > div.s-dynamicBottom {
+		bottom: 0;
+		right: 0;
+		left: 0;
+		height: 2px;
+		z-index: 100;
+		cursor: n-resize;
+	}
+	div.s-dynamic > div.s-dynamicBottomLeft {
+		bottom: 0;
+		left: 0;
+		width: 2px;
+		height: 2px;
+		z-index: 150;
+		cursor: ne-resize;
+	}
+	div.s-dynamic > div.s-dynamicLeft {
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		z-index: 100;
+		cursor: e-resize;
+	}
+	div.s-dynamic > div.s-dynamicTopLeft {
+		top: 0;
+		left: 0;
+		width:2px;
+		height: 2px;
+		z-index: 150;
+		cursor: nw-resize;
+	}
+</style>
+<script>
+	function DynamicSize(elem){
+		/** 定位element的position*/
+		this.position = "relative";
+		/** 需要操作的元素 */
+		this.element = elem;
+		/** 最小值 */
+		this.min = 100;
+		/** 存放8个小div */
+		this.dynamic = document.createElement("DIV");
+		/** 按下x轴 */
+		this.x = null;
+		/** 抬起x轴 */
+		this.xx = null;
+		/** 按下y轴 */
+		this.y = null;
+		/** 抬起y轴 */
+		this.yy = null; 
+		/** 中心x轴 */
+		this.cx = null;
+		/** 中心y轴 */
+		this.cy = null;
+		/** 按下className */
+		this.c = null;
+		/** 元素样式 */
+		this.style = this.element.style;
+		// 初始化
+		this.INIT();
+	}
+	DynamicSize.prototype.INIT = function(){
+		document.addEventListener("drop", function(e){
+			if(!this.c)
+				return;
+			this.cx = this.element.offsetWidth / 2 + this.element.offsetLeft;
+			this.cy = this.element.offsetHeight / 2 + this.element.offsetTop;
+			this.xx = e.pageX;
+			this.yy = e.pageY;
+			if(this.c.indexOf("Top") > -1 || this.c.indexOf("Bottom") > -1){
+				this.changeHeight();
+			}
+			if(this.c.indexOf("Right") > -1 || this.c.indexOf("Left") > -1){
+				this.changeWidth();
+			}
+			this.x = null;
+			this.xx = null;
+			this.y = null;
+			this.yy = null;
+			this.c = null;
+		}.bind(this));
+		document.addEventListener("dragover" , function(e){
+			e.preventDefault();
+		} , false);
+		// 赋值class
+		this.dynamic.className = "s-dynamic";
+		this.element.appendChild(this.dynamic);
+	}
+	DynamicSize.prototype.setDynamicDiv = function(){
+		// 赋值position
+		this.style.position = this.position;
+		// 赋值style里宽度和高度
+		this.style.width = this.element.offsetWidth + "px";
+		this.style.height = this.element.offsetHeight + "px";
+		// 赋值top和left
+		this.style.top = this.element.offsetTop + "px";
+	    this.style.left = this.element.offsetLeft + "px";
+		// 添加八个拖拽元素
+		//this.addDynamicDivSub("top")
+		//this.addDynamicDivSub("topRight");
+		this.addDynamicDivSub("right");
+		//this.addDynamicDivSub("bottomRight");
+		//this.addDynamicDivSub("bottom");
+		//this.addDynamicDivSub("bottomLeft");
+		//this.addDynamicDivSub("left");
+		//this.addDynamicDivSub("topLeft");
+	}
+	/**
+	 * 封装了按下事件
+	 */
+	DynamicSize.prototype.addDynamicDivSub = function(name){
+		var div = document.createElement("DIV");
+		div.draggable = true;
+		div.className = "s-dynamic" + name.substring(0, 1).toUpperCase() + name.substring(1);
+		div.ondragstart = function(e){
+			this.x = e.pageX;
+			this.y = e.pageY;
+			this.c = e.currentTarget.className;
+		}.bind(this);
+		this.dynamic.appendChild(div);
+		return div;
+	}
+	/**
+	 * 改变宽度
+	 */
+	DynamicSize.prototype.changeWidth = function(){
+		var width = parseInt(this.style.width);
+		// 按下x < 中心x轴 说明是操作left, 操作left同时要修改style.left的值
+		if(this.x < this.cx){
+			// 抬起x 大于 按下x 说明是缩小
+			if(this.xx > this.x){
+				// 宽度已经是最小值, 则不操作
+				if(width === this.min){
+				    return;
+				// 抬起x > (按下x + 宽度 - 最小值)
+				// this.x + width == right的位置, 用right减最小值, 若抬起x大于此值则触发保护
+				}else if(this.xx > (this.x + width - this.min)){
+					// 重新计算抬起x值 = 宽度 - 最小值 - 按下x 
+					this.xx = this.x + width - this.min;
+					width = this.min;
+				}else{
+					width -= this.xx - this.x;
+				}
+				this.style.left = parseInt(this.style.left) + this.xx - this.x + "px";
+			}
+			// 反之 说明是放大
+			else{
+				width += this.x - this.xx;
+				this.style.left = parseInt(this.style.left) - (this.x - this.xx) + "px";
+			}
+		}
+		// 反之 说明是操作right
+		else{
+			// 抬起x 大于 按下x 说明是放大 && 判断最小值
+			if(this.xx > this.x){
+				width += this.xx - this.x;
+			}
+			// 反之 说明是缩小 && 判断最小值
+			else{
+				width -= this.x - this.xx;
+				if(width < this.min)
+				    width = this.min;
+			}
+		}
+		this.style.width = width + "px";
+	}
+	DynamicSize.prototype.changeHeight = function(){
+		var height = parseInt(this.style.height);
+		// 按下y 小于 中心y轴 说明是操作top, 操作top同时要修改style.top
+		if(this.y < this.cy){
+			// 抬起y 大于 按下y 说明是缩小 && 判断最小值
+			if(this.yy > this.y){
+				// 高度低于或等于最小值则跳过
+				if(height <= this.min){
+					return;
+				}
+				// 判断头部缩小
+				else if(this.yy >= (height - this.min + this.y)){
+					this.yy = height - this.min + this.y;
+					height = this.min;
+				}else{
+					height -= this.yy - this.y;
+				}
+				this.style.top = parseInt(this.style.top) + (this.yy - this.y) + "px";
+			}
+			// 反之 说明是放大 && 判断最小值
+			else{
+				height += this.y - this.yy;
+				this.style.top = parseInt(this.style.top) - (this.y - this.yy) + "px";
+			}
+		}
+		// 反之 说明是操作right
+		else{
+			// 抬起y 大于 按下y 说明是放大 && 判断最小值
+			if(this.yy > this.y){
+				height += this.yy - this.y;
+			}
+			// 反之 说明是缩小 && 判断最小值
+			else{
+				height -= this.y - this.yy;
+				if(height < this.min)
+				    height = this.min;
+			}
+		}
+		this.style.height = height + "px";
+	}
+</script>
+</head>
+ 
+<body>
+    <div id="a" style="width:200px; height:200px; border:1px solid;" ></div>
+</body>
+ 
+<script>
+ 
+ 
+    var div = document.getElementById("a");
+	var dynamic = new DynamicSize(div);
+	
+	dynamic.position = "absolute";
+	dynamic.min = 150;
+	
+	dynamic.setDynamicDiv();
+	console.log(dynamic);
+	
+	
+</script>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>编辑器</title>
+	<script type="text/javascript">
+		
+		
+	</script>
+	<style>
+		#header {
+			background-color:black;
+			color:white;
+			text-align:center;
+			padding:5px;
+		}
+		.view{
+                width:13cm;
+                height:20cm;
+                border:1px #333 solid;
+                margin:5px;
+                float:left;
+        }
+        .edit{
+                 width:8cm;
+                height:20cm;
+                border:1px #333 solid;
+                margin:5px;
+                float:left;
+        }
+        .ass{
+                 width:8cm;
+                height:20cm;
+                border:1px #333 solid;
+                margin:5px;
+                float:left;
+        }
+	</style>
+</head>
+<body>
+	<div id="header">
+		<h2>面单编辑器</h1>
+	</div>
+
+	<div>
+		<div id="nav"> 
+			<div id="view"  class="view">视图
+				<!-- <div id='div' style="height: 1cm;border:1px solid #000; margin-right: -1px;margin-bottom: -1px;margin-left: -1px;margin-top: -1px" >1</div>   -->
+			</div>
+		</div>
+
+		<div> 
+			<div id="ele"  class="edit">编辑
+				<div id="section"">
+					<div class='child-column' >
+						<div style="display: inline; margin: 1cm">
+							<input value="1" onkeyup="setHeight(this.value)">
+							<input value="1" onkeyup="setWidth(this.value)">
+							<button onclick="addLine()"> 新建 </button>
+							<button onclick="createPage()"> 创建面单 </button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div> 
+			<div id="edit" class="ass">组件
+				<!-- <div id='div' style="height: 1cm;border:1px solid #000; margin-right: -1px;margin-bottom: -1px;margin-left: -1px;margin-top: -1px" >1</div>   -->
+			</div>
+		</div>
+
+	</div>
+
+
+
+
+</body>
+</html>
